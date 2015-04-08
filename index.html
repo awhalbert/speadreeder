@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="focusDummy" tabindex="1">
+  <head>
+    <title>Spead Reeder</title>
+
+    <link href='reader_style.css' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+    <header>
+      <h1>Spead Reeder</h1>
+    </header>
+
+      <div class="speed">
+        <span class="speed-label">Speed:</span>
+        <!-- <input class="speed-input"> -->
+        <input type="range" class="speed-slider" value="40">
+        <span class="current-wpm">Current speed: 400 wpm</span>
+      </div>
+      <div class="words">
+        <span class="current-word">Current word: 0 / 0</span>
+      </div>
+
+
+    <div id="openModal" class="modalDialog">
+      <div class="instructions">
+        <a href="#close" title="Close" class="close">X</a>
+        <h2>Instructons</h2>
+        <div class="intructions-intro">
+          <p>
+            Input your text by copying from your clipboard into the text area at the bottom of the page.
+          </p>
+          <img src="footer.png">
+          <!-- <p>
+            Did you miss a word? Switch into reverse by pressing the left arrow until you've gone back far enough, then resume reading with the right arrow. Pausing with space or using the playback buttons sets the reading direction to forward.
+          </p> -->
+        </div>
+        <h2>Controls</h2>
+        <p>
+          <span class="left">Pause/Resume</span>
+          <span class="right">SPACE</span>
+        </p>
+        <p>
+          <span class="left">Reverse</span>
+          <span class="right">&larr; </span>
+        </p>
+        <p>
+          <span class="left">Forward</span>
+          <span class="right">&rarr; </span>
+        </p>
+      </div>
+    </div>
+
+    <canvas id="canvas">
+    </canvas>
+
+    <footer>
+
+    <div class="interactive">
+      <input class="textField">
+      <button class="start">Start Speading</button>
+      <button class="stop">Stop</button>
+      <a href="#openModal">Instructions</a>
+    </div>
+    <div class="copyright">
+      <p class="copyright">Copyright &copy; 2015 Aaron W. Halbert. All Rights Reserved.</p>
+    </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="speedReader.js"></script>
+  </body>
+</html>
