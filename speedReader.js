@@ -11,31 +11,19 @@ var main = function () {
     var pauseStartTime = 0;
     var timeElapsedPaused = 0; 
 
-// moment.js
-// version : 1.7.2
-// author : Tim Wood
-// license : MIT
-// momentjs.com
-require.config({
-    paths: {
-        "moment": "moment.js",
-    }
-});
-define(["moment"], function (moment) {
-    moment().format();
-});
-
     var read = function (reverse) {
         if (currentWord < words.length) {
             writeWord(words[currentWord]);
-            $(".current-word").html("Current word: " + (currentWord + 1) + " / " + words.length);
+            $(".current-word").html("Current word: "
+              + (currentWord + 1) + " / " + words.length);
         }
         else {
             writeWord("FIN.");
-            var timeElapsedReading = new Date().getTime() - startTime - timeElapsedPaused;
-            var $jqdate = $(new Date(timeElapsedReading));
+            var timeElapsedReading = 
+              (new Date().getTime() - startTime -
+                timeElapsedPaused) / 1000;
             stopReading();
-            alert("Total time elapsed: " + $jqdate + " " + moment($jqdate.text(), "hh:mm:ss"));
+            alert("Total time elapsed: " + timeElapsedReading);
         }
         if (reverse) currentWord--;
         else currentWord++;
