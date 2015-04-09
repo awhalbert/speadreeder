@@ -1,4 +1,4 @@
-var main = function () {
+    var main = function () {
     "use strict";
 
     var reader = 0; // handle for event timer
@@ -6,27 +6,48 @@ var main = function () {
     var currentlyReading = false;
     var reverse = false;
     var interval = 150; // 400 wpm
+    // var interval = 60;
 
     var startTime = 0;
     var pauseStartTime = 0;
     var timeElapsedPaused = 0; 
 
     var read = function (reverse) {
+        if (currentWord < 0) {
+            currentWord = 0;
+            reverse = false;
+            stopReading();
+        }
         if (currentWord < words.length) {
             writeWord(words[currentWord]);
             $(".current-word").html("Current word: "
               + (currentWord + 1) + " / " + words.length);
         }
         else {
-            writeWord("FIN.");
-            var timeElapsedReading = 
-              (new Date().getTime() - startTime -
-                timeElapsedPaused) / 1000;
             stopReading();
-            alert("Total time elapsed: " + timeElapsedReading);
+            currentWord = words.length - 2; // one before last element
+            writeWord("FIN.");
         }
         if (reverse) currentWord--;
         else currentWord++;
+        calcAndDisplayElapsed();
+    }
+
+    var calcAndDisplayElapsed = function() {
+        var timeElapsedReading = new Date().getTime() - 
+          startTime - timeElapsedPaused;
+        var elapsedMoment = moment(timeElapsedReading);
+        $(".elapsed").html("Time elapsed: " +
+          elapsedMoment.format("mm:ss"));
+
+        // if (timeElapsedReading / 1000 / 60 >= 60)
+        //   $(".elapsed").html("Time elapsed: " +
+        //     elapsedMoment.format("h:m[m]:s.S[s]"));
+        // else if (timeElapsedReading / 1000 >= 60)
+        //   $(".elapsed").html("Time elapsed: " +
+        //     elapsedMoment.format("m[m]:s.S[s]"));
+        // else $(".elapsed").html("Time elapsed: " +
+        //   elapsedMoment.format("s[s]"));
     }
 
     var writeWord = function(text) {
@@ -60,11 +81,14 @@ var main = function () {
 
 
     $("button.start").click(function() {
+        currentWord = 0;
+        timeElapsedPaused = 0; 
         startReading(false);
     });
 
-    $("button.stop").click(function() {
-        stopReading();
+    $("button.pause").click(function() {
+        if (currentlyReading) stopReading();
+        else startReading(false)
     });
 
     $(document).keyup(function(evt) {

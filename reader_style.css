@@ -48,23 +48,52 @@ footer {
   overflow:visible;
 }
 
-.speed {
+/*.speed {
   padding-right: 30px;
   width: 770px;
   height: 100%;
-  /*float: right;*/
   background-color: #ddddff;
   left: 50%;
   top: 50%;
   margin: 255px 0px 0px -400px;
   position: fixed;
   vertical-align: middle;
+}*/
+
+.menu {
+  padding-right: 30px;
+  width: 770px;
+  height: 100%;
+  background-color: #ddddff;
+  left: 50%;
+  top: 50%;
+  margin: 255px 0px 0px -400px;
+  position: fixed;
+  vertical-align: middle;
+  display:table-cell;
+}
+
+.menu-left {
+  width: 600px;
+  background-color: #ddddff;
+  float: left;
+}
+
+.menu-right {
+  margin-top: 1%;
+  width: 170px;
+  height:100%;
+  background-color: #ddddff;
+  float: right;
+  text-align: right;
+}
+.menu-right span {
+  display: block;
 }
 
 /*.speed-input {
   float: left;
 }*/
-
 
 .speed-slider {
   width: 65%;
@@ -92,38 +121,11 @@ footer {
   width: 9%;
   float: left;
   text-align: right;
-  /*padding: 0px 10px;*/
-}
-
-.current-wpm {
-  margin-top: 5px;
-  width: 24%;
-  text-align: center;
-  float: right;
-}
-
-.words {
-  padding-right: 30px;
-  width: 770px;
-  background-color: #ddddff;
-  left: 50%;
-  top: 50%;
-  margin: 277px 0 0px -400px;
-  position: fixed;
-  min-height: 10em;
-  vertical-align: middle;
-}
-
-.current-word {
-  margin-top: 5px;
-  width: 24%;
-  text-align: center;
-  float: right;
 }
 
 .interactive {
   position:fixed;
-  bottom: 5.7%;
+  bottom: 5.5%;
   right: 50%;
   margin-right:-5px;
 }
