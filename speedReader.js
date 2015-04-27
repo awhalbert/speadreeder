@@ -1,12 +1,11 @@
-    var main = function () {
+var main = function () {
     "use strict";
 
     var reader = 0; // handle for event timer
-    var currentWord = 0;
-    var currentlyReading = false;
-    var reverse = false;
-    var interval = 150; // 400 wpm
-    // var interval = 60;
+    var currentWord = 0; // keeps track of index of current word in pasted text
+    var currentlyReading = false; // keeps track of reading/not reading state of program
+    var reverse = false; // keeps track of forward/reverse state of program
+    var interval = 150; // 150 ms between words = 400 wpm
 
     var startTime = 0;
     var pauseStartTime = 0;
@@ -50,9 +49,34 @@
         //   elapsedMoment.format("s[s]"));
     }
 
+    var isNumeric = function(obj) {
+        return !jQuery.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
+    }
+
+    var extractFontSize = function (str) {
+        var output = "";
+        for (var i = 0; i < str.length; i++) {
+            if (isNumeric(str[i])) {
+                output = output + str[i];
+            }
+        }
+        return output;
+    }
+
     var writeWord = function(text) {
         ctx.clearRect(0, 0, cv.width, cv.height);
         ctx.fillText(text, cv.width/2, cv.height/2);
+
+        // if word is too big, scale it down to fit
+        while (Math.round(ctx.measureText(text).width) > canvas.width) {
+            console.log("text too wide at: " + ctx.font);
+            var newSize = parseInt(extractFontSize(ctx.font));
+            ctx.font = (newSize-10).toString() + "px Arial";
+            console.log("new size: " + ctx.font);
+            ctx.clearRect(0, 0, cv.width, cv.height);
+            ctx.fillText(text, cv.width/2, cv.height/2);
+        };
+        ctx.font = "100px Arial";
     };
 
     var startReading = function(reverse) {
@@ -154,7 +178,7 @@
     cv.style.height = cv.height;
     var ctx = cv.getContext("2d");
     ctx.fillStyle = "white";
-    ctx.font = "32px Arial";
+    ctx.font = "100px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 };

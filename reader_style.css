@@ -8,8 +8,6 @@ body {
 }
 
 canvas {
-  height: 500px;
-  width: 800px;
   left: 50%;
   top: 50%;
   margin: -250px 0px 0px -400px;
@@ -166,31 +164,29 @@ footer {
   width: 400px;
   position: relative;
   margin: 10% auto;
-  padding: 5px 20px 13px 20px;
+  padding: 20px;
   border-radius: 10px;
   background: #fff;
   background: -moz-linear-gradient(#fff, #999);
   background: -webkit-linear-gradient(#fff, #999);
   background: -o-linear-gradient(#fff, #999);
+  z-index: 1;
 }
 
 .close {
-  background: #606061;
-  color: #FFFFFF;
-  line-height: 25px;
-  position: absolute;
-  right: -12px;
   text-align: center;
-  top: -10px;
-  width: 24px;
-  text-decoration: none;
   font-weight: bold;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  -moz-box-shadow: 1px 1px 3px #000;
-  -webkit-box-shadow: 1px 1px 3px #000;
-  box-shadow: 1px 1px 3px #000;
+  font-family: garamond;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  vertical-align: middle;
+  color: black;
+  float: right;
+  width: 45px;
+  border: 3px solid;
+  border-radius: 15px;
+  background-color: blue;
+  text-decoration: none;
 }
 
-.close:hover { background: #00d9ff; }
+.close:hover { background: #555555; }
