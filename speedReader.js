@@ -1,3 +1,9 @@
+/*
+
+NOTES: currently, the speed indicator is an average over the whole session instead of
+a reflection of a current estimation of wpm.
+*/
+
 var main = function () {
     "use strict";
 
@@ -17,13 +23,14 @@ var main = function () {
     var fontSize = 200; // px
     var fontFamily = "Arial";
     var speed_slider = $(".speed-slider");
-    var currentSpeed = speed_slider.val() * 10;
+    var currentSpeed = speed_slider.val() * 15;
     var longWordThreshold = 5;
     var longWord = false;
     // ----------------------------------------------------------------------------------|
     //  END DEFINE GLOBALS
     // ----------------------------------------------------------------------------------|
 
+    var count = 1
     var read = function (reverse) {
         if (currentWord < 0) {
             currentWord = 0;
@@ -58,14 +65,13 @@ var main = function () {
             stopReading();
             currentWord = words.length - 2; // one before last element
             writeWord("FIN.");
-            var timeElapsedReading = new Date().getTime() - startTime - timeElapsedPaused;
-            $(".current-word").html("Effective wpm: " + Math.round(words.length / (timeElapsedReading / 1000 / 60)) + " wpm");
-            console.log(timeElapsedReading / 1000);
-
+            calcAndDisplayWPM();
         }
         if (reverse) currentWord--;
         else currentWord++;
         calcAndDisplayElapsed();
+        if (count % 5 == 0) calcAndDisplayWPM();
+        count++;
     }
 
     var longWordExtraTime = function () {
@@ -98,6 +104,11 @@ var main = function () {
         //   elapsedMoment.format("s[s]"));
     }
 
+    var calcAndDisplayWPM = function () {
+        var timeElapsedReading = new Date().getTime() - startTime - timeElapsedPaused;
+        console.log("time elapsed: " + timeElapsedReading / 1000);
+        $(".current-wpm").html("Speed: " + Math.round(currentWord / (timeElapsedReading / 1000 / 60)) + " wpm");
+    }
     var isNumeric = function(obj) {
         return !jQuery.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
     }
@@ -207,8 +218,7 @@ var main = function () {
 
     speed_slider.change(function(event) {
         stopReading();
-        currentSpeed = speed_slider.val() * 10;
-        $(".current-wpm").html("Current speed: " + currentSpeed + " wpm");
+        currentSpeed = speed_slider.val() * 15;
         interval = wpmToInterval(currentSpeed);
         startReading(reverse);
     });
