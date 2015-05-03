@@ -9,14 +9,14 @@ body {
 
 canvas {
   left: 50%;
-  top: 50%;
+  top: 250px;
   margin: -250px 0px 0px -400px;
-  position: fixed;
+  position: relative;
   background-color: #404040;
 }
 
 header {
-  padding: 30px;
+  padding: 15px 30px 30px 30px;
   text-align: center;
 }
 
@@ -46,46 +46,35 @@ footer {
   overflow:visible;
 }
 
-/*.speed {
-  padding-right: 30px;
-  width: 770px;
-  height: 100%;
-  background-color: #ddddff;
-  left: 50%;
-  top: 50%;
-  margin: 255px 0px 0px -400px;
-  position: fixed;
-  vertical-align: middle;
-}*/
-
 .menu {
-  padding-right: 30px;
+  padding: 5px 15px;
+  position: absolute;
   width: 770px;
-  height: 100%;
   background-color: #ddddff;
   left: 50%;
   top: 50%;
+  height:75px;
   margin: 255px 0px 0px -400px;
-  position: fixed;
-  vertical-align: middle;
-  display:table-cell;
 }
 
-.menu-left {
-  width: 600px;
-  background-color: #ddddff;
-  float: left;
+.speed-menu {
+  width:800px;
 }
 
-.menu-right {
-  margin-top: 1%;
+.interactive {
+  width:400px;
+  padding: 15px 0 0 0;
+  float:left;
+}
+
+.statistics {
   width: 170px;
-  height:100%;
-  background-color: #ddddff;
+  /*margin-top:-20px;*/
+  /*background-color: #ddddff;*/
   float: right;
-  text-align: right;
+  text-align:right;
 }
-.menu-right span {
+.statistics span {
   display: block;
 }
 
@@ -94,8 +83,8 @@ footer {
 }*/
 
 .speed-slider {
-  width: 65%;
-  margin-top: 5px;
+  width: 715px;
+  /*margin-top: 5px;*/
   -webkit-appearance: none;
   border-radius: 8px;
   height: 15px;
@@ -113,19 +102,7 @@ footer {
 }
 
 .speed-label {
-  margin-top: 5px;
   margin-right: 1%;
-  vertical-align: middle;
-  width: 9%;
-  float: left;
-  text-align: right;
-}
-
-.interactive {
-  position:fixed;
-  bottom: 5.5%;
-  right: 50%;
-  margin-right:-5px;
 }
 
 .control {
@@ -133,9 +110,7 @@ footer {
 }
 
 .copyright {
-  position:fixed;
-  left:50%;
-  margin-left: -130px;
+  text-align: center;
   font-size: 8pt;
 }
 
