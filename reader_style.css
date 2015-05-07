@@ -26,21 +26,6 @@ footer {
   left: 50%;
 }
 
-.instructions {
-  overflow: auto;
-}
-
-.left {
-  width: 150px;
-  float: left;
-}
-.right {
-  width: 150px;
-  float: right;
-  text-align: right;
-  font-weight: bold;
-}
-
 .menu-items {
   display:inline;
   overflow:visible;
@@ -62,15 +47,13 @@ footer {
 }
 
 .interactive {
-  width:400px;
+  width:450px;
   padding: 15px 0 0 0;
   float:left;
 }
 
 .statistics {
-  width: 170px;
-  /*margin-top:-20px;*/
-  /*background-color: #ddddff;*/
+  width: 240px;
   float: right;
   text-align:right;
 }
@@ -122,12 +105,16 @@ footer {
   bottom: 0;
   left: 0;
   background: rgba(0,0,0,0.8);
-  z-index: 99999;
+  z-index: 9999;
   opacity:0;
   -webkit-transition: opacity 400ms ease-in;
   -moz-transition: opacity 400ms ease-in;
   transition: opacity 400ms ease-in;
   pointer-events: none;
+}
+
+.modalDialog div {
+  overflow: auto;
 }
 
 .modalDialog:target {
@@ -148,6 +135,17 @@ footer {
   z-index: 1;
 }
 
+.modalDialog .left {
+  width: 125px;
+  float: left;
+}
+.modalDialog .right {
+  width: 175px;
+  float: right;
+  text-align: right;
+  font-weight: bold;
+}
+
 .close {
   text-align: center;
   font-weight: bold;
@@ -165,3 +163,12 @@ footer {
 }
 
 .close:hover { background: #555555; }
+
+option {
+	color:red;
+	font-size:6pt;
+}
+
+.color {
+	z-index: -1;
+}
