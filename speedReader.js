@@ -30,7 +30,7 @@ var colon_slider = $("#colon-slider");
 var sentence_slider = $("#sentence-slider");
 var speedMultiplier = 12;
 var currentSpeed = speed_slider.val() * speedMultiplier; // slider goes from 0 to 1500 wpm instad of 0 to 100
-var longWordThreshold = 6;
+var longWordThreshold = 4;
 var longWord = false;
 
 // milliseconds
