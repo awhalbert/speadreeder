@@ -84,6 +84,26 @@ footer {
   cursor: pointer;
 }
 
+.pause-slider {
+  width: 100px;
+  /*margin-top: 5px;*/
+  -webkit-appearance: none;
+  border-radius: 8px;
+  height: 15px;
+  border: 1px solid #bdc3c7;
+  background-color: #dddddd; 
+  float:left;
+}
+.pause-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: #2255aa;
+  border: 3px solid #474747;
+  width: 20px;
+  height: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .speed-label {
   margin-right: 1%;
 }
@@ -114,7 +134,7 @@ footer {
 }
 
 .modalDialog div {
-  overflow: auto;
+  overflow:hidden;
 }
 
 .modalDialog:target {
@@ -151,15 +171,24 @@ footer {
   font-weight: bold;
   font-family: garamond;
   -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  vertical-align: middle;
   color: black;
   float: right;
   width: 45px;
+  line-height:20px;
   border: 3px solid;
   border-radius: 15px;
   background-color: blue;
   text-decoration: none;
+}
+
+#pauseClose {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:200px;
+  line-height:100px;
+  border-radius: 50px;
 }
 
 .close:hover { background: #555555; }

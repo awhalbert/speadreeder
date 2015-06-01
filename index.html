@@ -2,8 +2,10 @@
 <html class="focusDummy" tabindex="1">
   <head>
     <title>Spead Reeder</title>
-
     <link href='reader_style.css' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="moment.min.js"></script>
+    <script src="jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="jscolor/jscolor.js"></script>
   </head>
 
   <body>
@@ -22,7 +24,7 @@
         </div>
         <div class="menu-bottom-container">
           <div class="interactive">
-            <input class="textField">
+            <input type="text" class="textField">
             <button class="start">Begin Speeding</button>
             <button class="pause">Pause/Resume</button>
             <a href="#openInstructions" class="shouldPause">Instructions</a>
@@ -70,8 +72,38 @@
               </optgroup>
             </select>
           </div>
+        </p>
+        <p>
           <span class="left">Font Color</span>
           <span class="right"><input class="color"></span>
+        </p>
+        <p>
+          <span class="left">Comma Pause</span>
+          <div class="right">
+            <input type="range" id="comma-slider" class="pause-slider">
+            <span id="comma-slider-value"></span>
+          </div>
+        </p>
+        <p>
+          <span class="left">Semicolon Pause</span>
+          <div class="right">
+            <input type="range" id="semicolon-slider" class="pause-slider">
+            <span id="semicolon-slider-value"></span>
+          </div>
+        </p>
+        <p>
+          <span class="left">Colon Pause</span>
+          <div class="right">
+            <input type="range" id="colon-slider" class="pause-slider">
+            <span id="colon-slider-value"></span>
+          </div>
+        </p>
+        <p>
+          <span class="left">Sentence Pause</span>
+          <div class="right">
+            <input type="range" id="sentence-slider" class="pause-slider">
+            <span id="sentence-slider-value"></span>
+          </div>
         </p>
       </div>
     </div>
@@ -105,10 +137,10 @@
       </div>
     </div>
 
+    <div id="pauseScreen" class="modalDialog">
+      <a href="#close" title="Close" id="pauseClose" class="close">RESUME</a>
+    </div>
     <footer>
-    <script type="text/javascript" src="moment.min.js"></script>
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="jscolor/jscolor.js"></script>
     <script src="speedReader.js"></script>
     </footer>
   </body>
