@@ -98,7 +98,7 @@ var main = function () {
     }
 
     var longWordExtraTime = function () {
-        return Math.round((words[currentWord].length - longWordThreshold) * 10 * (100 / speed_slider.val()));
+        return Math.round((words[currentWord].length - longWordThreshold) * 5 * (100 / speed_slider.val()));
     }
 
     var wpmToInterval = function (speed) {
