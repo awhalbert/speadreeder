@@ -9,7 +9,7 @@ a reflection of a current estimation of wpm.
 // ----------------------------------------------------------------------------------|
 var reader = 0; // handle for event timer
 var currentWord = 0; // keeps track of index of current word in pasted text
-var currentlyReading = false; // keeps track of reading/not reading state of program
+var paused = false; // keeps track of reading/not reading state of program
 var reverse = false; // keeps track of forward/reverse state of program
 var interval = 150; // 150 ms between words = 400 wpm
 
@@ -30,11 +30,8 @@ var colon_slider = $("#colon-slider");
 var sentence_slider = $("#sentence-slider");
 var speedMultiplier = 12;
 var currentSpeed = speed_slider.val() * speedMultiplier; // slider goes from 0 to 1500 wpm instad of 0 to 100
-var longWordThreshold = 4;
-var longWord = false;
 
 // milliseconds
-var foundNoPunc     = false;
 var commaPause      = 200;
 var semicolonPause  = 300;
 var colonPause      = 300;
@@ -49,16 +46,24 @@ var main = function () {
 
     var count = 1
     var read = function (reverse) {
-        if (currentWord === 0) timeTenWordsAgo = new Date().getTime();
+        if (currentWord === 0) {
+        	timeTenWordsAgo = new Date().getTime();
+        	if (reverse) { // deal with case of reverse returning to first word
+        		reverse = false;
+        		stopReading();
+	            $(".current-word").html("Current word: "
+	            	+ (currentWord + 1) + " / " + words.length);
+        		return;
+        	}
+        }
         else if (currentWord < 0) {
             currentWord = 0;
             reverse = false;
             stopReading();
         }
         if (currentWord < words.length) {
-            writeWord(words[currentWord]);
+    		writeWord(words[currentWord]);
             if (!reverse) {
-                foundNoPunc = false;
                 switch(words[currentWord][words[currentWord].length - 1]) {
                     case ',':
                         delayOneWordAndContinue(commaPause);
@@ -75,30 +80,24 @@ var main = function () {
                         delayOneWordAndContinue(sentencePause);
                         break;
                     default:
-                        if (words[currentWord].length > longWordThreshold) {
-                            var delta = longWordExtraTime();
-                            // console.log("LONG WORD: " + words[currentWord] + ", extra time: " + delta);
-                            delayOneWordAndContinue(interval + delta);
-                        }
+                        delayOneWordAndContinue(extraTimeFromWordLength());
                 }
+            }
+            else { // reverse
+            	delayOneWordAndContinue(interval, true);
             }
             $(".current-word").html("Current word: "
               + (currentWord + 1) + " / " + words.length);
+            if (reverse) currentWord--;
+        	else currentWord++;
         }
-        else {
-            stopReading();
-            currentWord = words.length - 2; // one before last element
-            calcAndDisplayWPM();
-        }
-        if (reverse) currentWord--;
-        else currentWord++;
         calcAndDisplayElapsed();
         if (count % 10 === 0) calcAndDisplayWPM();
         count++;
     }
 
-    var longWordExtraTime = function () {
-        return Math.round((words[currentWord].length - longWordThreshold) * 5 * (100 / speed_slider.val()));
+    var extraTimeFromWordLength = function () {
+        return Math.round((words[currentWord].length) * 2 * (100 / speed_slider.val()));
     }
 
     var wpmToInterval = function (speed) {
@@ -112,6 +111,8 @@ var main = function () {
     }
 
     var calcAndDisplayWPM = function () {
+    	console.log("timeTenAgo: " + timeTenWordsAgo);
+    	console.log("elapsed paused time since last ten words: " + timeElapsedPausedSince);
         var timeElapsedLastTenWords = new Date().getTime() - timeTenWordsAgo - timeElapsedPausedSince;
         $(".current-wpm").html("Speed: " + Math.round(10 / (timeElapsedLastTenWords / 1000 / 60)) + " wpm");
         timeTenWordsAgo = new Date().getTime();
@@ -144,8 +145,15 @@ var main = function () {
         ctx.fillStyle = fontColor;
     }
 
-    var startReading = function(reverse, addPauseTime) {
-        if (typeof(addPauseTime) === 'undefined') addPauseTime = true;
+    var stopReading = function() {
+        // get the time when reading stopped
+        pauseStartTime = new Date().getTime();
+        clearTimeout(reader);
+        $(".focusDummy").focus();
+    }
+
+    var delayOneWordAndContinue = function(addedDelay, addPauseTime) {
+        if (typeof(addPauseTime) === 'undefined') addPauseTime = false;
         // add the time elapsed while stopped to the corresponding counter
         if (currentWord === 0) {
             startTime = new Date().getTime();
@@ -154,46 +162,34 @@ var main = function () {
         else if (addPauseTime) {
             updateTimePaused(new Date().getTime() - pauseStartTime);
         }
-        else currentlyReading = false; // make sure if we're coming from a delay, we reset currentlyReading to false
-        if (!currentlyReading && currentWord < words.length-2) {
+        if (currentWord < words.length-1) {
             // console.log("SETTING INTERVAL: " + interval);
-            clearInterval(reader);
-            reader = setInterval(function () {read(reverse);}, interval);
-            currentlyReading = true;
+	    	// console.log("addedDelay: " + addedDelay + ", interval: " + interval);
+	        clearInterval(reader);
+	        reader = setTimeout(function() {
+	            read(reverse);
+	            pauseStartTime = new Date().getTime();
+	        }, addedDelay + interval);
             $(".focusDummy").focus();
         }
-    }
+        else calcAndDisplayWPM();
 
-    var stopReading = function() {
-        // get the time when reading stopped
-        pauseStartTime = new Date().getTime();
-        currentlyReading = false;
-        clearInterval(reader);
-        $(".focusDummy").focus();
-    }
-
-    var delayOneWordAndContinue = function(addedDelay) {
-        clearInterval(reader);
-        reader = setTimeout(function() {
-            console.log("added Delay: " + addedDelay);
-            read(false);
-            // console.log("interval: " + interval);
-            pauseStartTime = new Date().getTime();
-            startReading(false, false);
-        }, addedDelay + interval);
     }
 
     var pause = function () {
+        paused = true;
         stopReading();
         location.href = "#pauseScreen";
     }
 
     var unpause = function () {
+    	paused = false;
         location.href = "#close";
-        startReading(false);
+        delayOneWordAndContinue(interval, true);
     }
 
     var updateTimePaused = function (pauseDelta) {
+    	console.log("update pause: " + timeElapsedPaused, pauseDelta);
         timeElapsedPaused += pauseDelta;
         if (pauseStartTime > timeTenWordsAgo) timeElapsedPausedSince += pauseDelta;
     }
@@ -201,28 +197,40 @@ var main = function () {
     $("button.start").click(function() {
         currentWord = 0;
         timeElapsedPaused = 0; 
-        startReading(false);
+        delayOneWordAndContinue(false);
     });
 
     $("button.pause").click(function() {
-        if (currentlyReading) pause();
-        else unpause();
+        if (paused) unpause();
+        else pause();
     });
 
     $(document).keyup(function(evt) {
-        if (evt.keyCode == 32) { // space
-          if (currentlyReading) pause();
-          else unpause();
-        }
-        else if (evt.keyCode == 37) { // left arrow
-          reverse = true;
-          stopReading();
-          startReading(reverse);
-        }
-        else if (evt.keyCode == 39) { // right arrow
-          reverse = false;
-          stopReading();
-          startReading(reverse);
+    	switch (evt.keyCode) {
+			case 32: // space bar
+				if (paused) unpause();
+				else pause();
+				break;
+			case 37: // left arrow
+				reverse = true;
+				stopReading();
+				delayOneWordAndContinue();
+				break;
+			case 39: // right arrow
+				reverse = false;
+				stopReading();
+				delayOneWordAndContinue(reverse);
+				break;
+			case 83: // lowercase s
+				var suffix = "#openSettings";
+				if (location.href.indexOf(suffix, location.href.length - suffix.length) !== -1) {
+					unpause();
+				}
+				else {
+					paused = true;
+					stopReading();
+					location.href = "#openSettings";
+				}
         }
     });
 
@@ -281,34 +289,28 @@ var main = function () {
     }
 
     speed_slider.change(function(event) {
-        // console.log("in speed slider");
         stopReading();
         currentSpeed = speed_slider.val() * speedMultiplier;
         interval = wpmToInterval(currentSpeed);
-        startReading(reverse);
         setPunctuationPausesFromSpeed();
+        delayOneWordAndContinue(reverse);
     });
 
     setPunctuationPausesFromSpeed();
     comma_slider.change(function(event) {
         setSliderValueAndText("comma", comma_slider.val());
-        console.log(commaPause);
     });
 
     semicolon_slider.change(function(event) {
         setSliderValueAndText("semicolon", semicolon_slider.val());
-        console.log(semicolonPause);
     });
 
     colon_slider.change(function(event) {
         setSliderValueAndText("colon", colon_slider.val());
-        
-        console.log(colonPause);
     });
 
     sentence_slider.change(function(event) {
         setSliderValueAndText("sentence", sentence_slider.val());
-        console.log(sentencePause);
     });
 
 	$('#font_size').change(function(){ 
@@ -336,7 +338,7 @@ var main = function () {
         // instead of bringing up the pause dialog
 	});
 	$('.close').click(function(){
-	    startReading(reverse);
+	    delayOneWordAndContinue(reverse);
 	});
 
 	$('.color').change(function(evt){
