@@ -156,11 +156,11 @@ footer {
 }
 
 .modalDialog .left {
-  width: 125px;
+  width: 140px;
   float: left;
 }
 .modalDialog .right {
-  width: 175px;
+  width: 160px;
   float: right;
   text-align: right;
   font-weight: bold;

@@ -111,13 +111,19 @@ var main = function () {
     }
 
     var calcAndDisplayWPM = function () {
-    	console.log("timeTenAgo: " + timeTenWordsAgo);
-    	console.log("elapsed paused time since last ten words: " + timeElapsedPausedSince);
+    	// console.log("timeTenAgo: " + timeTenWordsAgo);
+    	// console.log("elapsed paused time since last ten words: " + timeElapsedPausedSince);
         var timeElapsedLastTenWords = new Date().getTime() - timeTenWordsAgo - timeElapsedPausedSince;
         $(".current-wpm").html("Speed: " + Math.round(10 / (timeElapsedLastTenWords / 1000 / 60)) + " wpm");
         timeTenWordsAgo = new Date().getTime();
         timeElapsedPausedSince = 0;
     }
+
+    var calcAndDisplaySessionAvgWPM = function () {
+        $(".current-wpm").html("Speed (session average): " + 
+        	Math.round(words.length / (timeElapsedReading / 1000 / 60)) + " wpm");
+    }
+
     var isNumeric = function(obj) {
         return !jQuery.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
     }
@@ -172,8 +178,9 @@ var main = function () {
 	        }, addedDelay + interval);
             $(".focusDummy").focus();
         }
-        else calcAndDisplayWPM();
-
+        else { // done
+        	calcAndDisplaySessionAvgWPM();
+        }
     }
 
     var pause = function () {
@@ -189,7 +196,7 @@ var main = function () {
     }
 
     var updateTimePaused = function (pauseDelta) {
-    	console.log("update pause: " + timeElapsedPaused, pauseDelta);
+    	// console.log("update pause: " + timeElapsedPaused, pauseDelta);
         timeElapsedPaused += pauseDelta;
         if (pauseStartTime > timeTenWordsAgo) timeElapsedPausedSince += pauseDelta;
     }
@@ -207,6 +214,13 @@ var main = function () {
 
     $(document).keyup(function(evt) {
     	switch (evt.keyCode) {
+			case 27: // esc
+				// KNOWN BUG: if not in settings or instructions,
+				// pressing escape messes up time paused and elapsed info
+				paused = false;
+				delayOneWordAndContinue(interval, true);
+				location.href = "#close";
+				break;
 			case 32: // space bar
 				if (paused) unpause();
 				else pause();
@@ -221,6 +235,17 @@ var main = function () {
 				stopReading();
 				delayOneWordAndContinue(reverse);
 				break;
+			case 73: // lowercase i
+				var suffix = "#openInstructions";
+				if (location.href.indexOf(suffix, location.href.length - suffix.length) !== -1) {
+					unpause();
+				}
+				else {
+					paused = true;
+					stopReading();
+					location.href = suffix;
+				}
+				break;
 			case 83: // lowercase s
 				var suffix = "#openSettings";
 				if (location.href.indexOf(suffix, location.href.length - suffix.length) !== -1) {
@@ -229,7 +254,7 @@ var main = function () {
 				else {
 					paused = true;
 					stopReading();
-					location.href = "#openSettings";
+					location.href = suffix;
 				}
         }
     });
