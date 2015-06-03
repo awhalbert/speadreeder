@@ -77,7 +77,8 @@ var main = function () {
                     case '.':
                     case '?':
                     case '!':
-                        delayOneWordAndContinue(sentencePause);
+                    	if (["mr.", "mrs.", "p.", "st.", "rd."].indexOf(words[currentWord].toLowerCase()) != -1) delayOneWordAndContinue(extraTimeFromWordLength());
+                    	else delayOneWordAndContinue(sentencePause);
                         break;
                     default:
                         delayOneWordAndContinue(extraTimeFromWordLength());
